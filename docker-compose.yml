@@ -1,0 +1,25 @@
+version: "3"
+services:
+  fllpostgres:
+    #image: fisherylogistics/fllpostgres:latest
+    image: fllpostgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - fllpostgres_data,/var/lib/postgresql/data/pgdata
+    networks:
+      - fllnet
+    deploy:
+      mode: global
+
+  django_rest_api:
+    image: django_rest_api
+    ports:
+      - "8080:80"
+    networks:
+      - fllnet
+    deploy:
+      mode: global
+
+networks:
+  fllnet:
