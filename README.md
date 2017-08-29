@@ -1,3 +1,10 @@
 # docker-deploy
-Deployment descriptor for docker-compose deployment
-```docker stack deploy -c docker-compose.yml prodstack```
+To deploy, run the following:
+```
+scp docker-compose.yml server:
+```
+then ssh to the server itself and run:
+```
+sudo -H docker-compose pull
+sudo -H docker-compose up -d
+```

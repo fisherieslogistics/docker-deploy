@@ -1,25 +1,34 @@
 version: "3"
+
 services:
   fllpostgres:
-    #image: fisherylogistics/fllpostgres:latest
-    image: fllpostgres
-    ports:
-      - "5432:5432"
+    image: fisherylogistics/fllpostgres:latest
     volumes:
-      - fllpostgres_data,/var/lib/postgresql/data/pgdata
+      - "/data/postgres:/var/lib/postgresql/data/pgdata"
     networks:
       - fllnet
-    deploy:
-      mode: global
+    restart: always
+    ports:
+      - "127.0.0.1:5432:5432"
 
   django_rest_api:
-    image: django_rest_api
-    ports:
-      - "8080:80"
+    image: fisherylogistics/rest-api:latest
     networks:
       - fllnet
-    deploy:
-      mode: global
+    depends_on:
+      - migration
+      - fllpostgres
+    restart: always
+    ports:
+      - "80:80"
+
+  migration:
+    image: fisherylogistics/rest-api:latest
+    networks:
+      - fllnet
+    command: sh -c "cd /home/docker/code/app/ && python3 manage.py migrate --noinput"
+    depends_on:
+      - fllpostgres
 
 networks:
   fllnet:
