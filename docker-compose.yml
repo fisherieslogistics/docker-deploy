@@ -21,7 +21,17 @@ services:
     restart: always
     ports:
       - "80:80"
+      - "443:443"
+    volumes:
+      - "/data/letsencrypt/etc:/etc/nginx/certs"
+      - "/data/letsencrypt/www:/var/www/letsencrypt"
 
+  letsencrypt:
+    image: certbot/certbot:latest
+    volumes:
+      - "/data/letsencrypt/etc:/etc/letsencrypt"
+      - "/data/letsencrypt/www:/var/lib/letsencrypt"
+  
   migration:
     image: fisherylogistics/rest-api:latest
     networks:

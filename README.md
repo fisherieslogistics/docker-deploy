@@ -1,7 +1,7 @@
 # docker-deploy
 To deploy, run the following:
 ```
-scp docker-compose.yml server:
+scp docker-compose.yml catchhub.com:
 ```
 then ssh to the server itself and run:
 ```
