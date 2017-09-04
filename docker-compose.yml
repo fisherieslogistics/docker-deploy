@@ -11,6 +11,12 @@ services:
     ports:
       - "127.0.0.1:5432:5432"
       
+  react_web_app:
+    image: fisherylogistics/react-web-app:latest
+    networks:
+      - fllnet
+    restart: always
+
   django_rest_api:
     image: fisherylogistics/rest-api:latest
     networks:
