@@ -10,17 +10,6 @@ services:
     restart: always
     ports:
       - "127.0.0.1:5432:5432"
-
-  fluentd:
-    image: fisherylogistics/fluentd
-    volumes:
-      - "/data/logs/fluentd:/fluentd/log"
-    #ports: we probably don't need to expose ports to the host... unless we start logging docker container there
-    #  - "24224:24224"
-    #  - "24224:24224/udp"
-    networks:
-      - fllnet
-    restart: always
       
   django_rest_api:
     image: fisherylogistics/rest-api:latest
@@ -29,7 +18,6 @@ services:
     depends_on:
       - migration
       - fllpostgres
-      - fluentd
     restart: always
     ports:
       - "80:80"
@@ -37,6 +25,9 @@ services:
     volumes:
       - "/data/letsencrypt/etc:/etc/nginx/certs"
       - "/data/letsencrypt/www:/var/www/letsencrypt"
+      - "/data/logs/catchhub:/var/log/catchhub"
+      - "/data/logs/nginx:/var/log/nginx"
+      - "/data/logs/django-supervisord:/var/log/supervisor"
   
   migration:
     image: fisherylogistics/rest-api:latest
@@ -45,7 +36,6 @@ services:
     command: sh -c "cd /home/docker/code/app/ && python3 manage.py migrate --noinput"
     depends_on:
       - fllpostgres
-      - fluentd
 
 networks:
   fllnet:
