@@ -22,7 +22,6 @@ services:
     networks:
       - fllnet
     depends_on:
-      - migration
       - fllpostgres
     restart: always
     ports:
@@ -35,13 +34,5 @@ services:
       - "/data/logs/nginx:/var/log/nginx"
       - "/data/logs/django-supervisord:/var/log/supervisor"
   
-  migration:
-    image: fisherylogistics/rest-api:latest
-    networks:
-      - fllnet
-    command: sh -c "cd /home/docker/code/app/ && python3 manage.py migrate --noinput"
-    depends_on:
-      - fllpostgres
-
 networks:
   fllnet:
