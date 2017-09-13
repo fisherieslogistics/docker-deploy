@@ -11,7 +11,18 @@ services:
     restart: always
     ports:
       - "127.0.0.1:5432:5432"
-      
+
+  couchdb:
+    image: klaemo/couchdb:2.0.0
+    volumes:
+      - "/data/couchdb:/opt/couchdb/data"
+
+  couchpost:
+    image: fisherylogistics/couchpost:latest
+    networks:
+      - fllnet
+    restart: always
+
   react_web_app:
     image: fisherylogistics/react-web-app:latest
     networks:
