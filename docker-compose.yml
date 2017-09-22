@@ -13,9 +13,11 @@ services:
       - "127.0.0.1:5432:5432"
 
   couchdb:
-    image: klaemo/couchdb:2.0.0
+    image: apache/couchdb:2.1
     volumes:
-      - "/data/couchdb:/opt/couchdb/data"
+      - "/data/couchdb/data:/opt/couchdb/data"
+      - "/data/couchdb/conf:/opt/couchdb/etc/local.d"
+      - "/data/logs/couchdb:/opt/couchdb/var/log"
 
   couchpost:
     image: fisherylogistics/couchpost:latest
@@ -24,6 +26,10 @@ services:
     restart: always
     volumes:
       - "/data/logs/couchpost:/var/log/catchhub"
+      - "/data/logs/couchpost-supervisord:/var/log/supervisor"
+    depends_on:
+      - fllpostgres
+      - couchdb
 
   fishserve_sender:
     image: fisherylogistics/fishserve-sender:latest
@@ -34,6 +40,19 @@ services:
       - "/data/logs/fishserve-sender:/var/log/catchhub"
       - "/data/logs/fishserve-sender-supervisord:/var/log/supervisor"
 
+  http_proxy:
+    image: fisherylogistics/http-proxy:latest
+    networks:
+      - fllnet
+    restart: always
+    volumes:
+      - "/data/letsencrypt/etc:/usr/local/openresty/nginx/conf/certs"
+      - "/data/letsencrypt/www:/var/www/letsencrypt"
+      # TODO logging
+    ports:
+      - "80:80"
+      - "443:443"
+  
   react_web_app:
     image: fisherylogistics/react-web-app:latest
     networks:
@@ -47,12 +66,7 @@ services:
     depends_on:
       - fllpostgres
     restart: always
-    ports:
-      - "80:80"
-      - "443:443"
     volumes:
-      - "/data/letsencrypt/etc:/etc/nginx/certs"
-      - "/data/letsencrypt/www:/var/www/letsencrypt"
       - "/data/logs/catchhub:/var/log/catchhub"
       - "/data/logs/nginx:/var/log/nginx"
       - "/data/logs/django-supervisord:/var/log/supervisor"
