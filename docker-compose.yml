@@ -48,6 +48,7 @@ services:
     image: fisherylogistics/http-proxy:latest
     networks:
       - fllnet
+      - jenkinsnet
     restart: always
     volumes:
       - "/data/letsencrypt/etc:/usr/local/openresty/nginx/conf/certs"
@@ -57,6 +58,7 @@ services:
       - "80:80"
       - "443:443"
       - "5985:5985"
+      - "8080:8080"
   
   react_web_app:
     image: fisherylogistics/react-web-app:latest
@@ -78,3 +80,4 @@ services:
   
 networks:
   fllnet:
+  jenkinsnet:
