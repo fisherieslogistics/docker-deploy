@@ -1,4 +1,4 @@
-rsync docker-* deployer@$1:
+rsync -o StrictHostKeyChecking=no docker-* deployer@$1:
 
-ssh deployer@$1 "echo \"CATCHHUB_VERSION=$2\" >.env"
-ssh deployer@$1 "./docker-update-and-restart.sh"
+ssh -o StrictHostKeyChecking=no deployer@$1 "echo \"CATCHHUB_VERSION=$2\" >.env"
+ssh -o StrictHostKeyChecking=no deployer@$1 "./docker-update-and-restart.sh"
