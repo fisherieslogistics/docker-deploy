@@ -25,7 +25,7 @@ services:
       - fllnet
 
   couchpost:
-    image: fisherylogistics/couchpost:latest
+    image: fisherylogistics/couchpost:${CATCHHUB_VERSION}
     networks:
       - fllnet
     restart: always
@@ -37,7 +37,7 @@ services:
       - couchdb
 
   fishserve_sender:
-    image: fisherylogistics/fishserve-sender:latest
+    image: fisherylogistics/fishserve-sender:${CATCHHUB_VERSION}
     networks:
       - fllnet
     restart: always
@@ -60,13 +60,13 @@ services:
       - "5985:5985"
   
   react_web_app:
-    image: fisherylogistics/react-web-app:latest
+    image: fisherylogistics/react-web-app:${CATCHHUB_VERSION}
     networks:
       - fllnet
     restart: always
 
   django_rest_api:
-    image: fisherylogistics/rest-api:latest
+    image: fisherylogistics/rest-api:${CATCHHUB_VERSION}
     networks:
       - fllnet
     depends_on:
