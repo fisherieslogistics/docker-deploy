@@ -96,6 +96,7 @@ services:
     volumes: # http://doc.prestashop.com/display/PS15/Manual+update#Manualupdate-Step1–SaveandBackupYourCurrentStore
       - "/data/prestashop/img:/var/www/html/img"
       - "/data/prestashop/mails:/var/www/html/mails"
+      - "/data/prestashop/symlinks:/var/www/symlinks"
     
 networks:
   fllnet:
